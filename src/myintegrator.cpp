@@ -4,8 +4,6 @@ My own simple integrators for the Poisson Equation
 
 */
 
-
-#include <fem.hpp>
 #include "myintegrator.hpp"
 
 namespace ngfem
@@ -16,22 +14,22 @@ namespace ngfem
 
     Input is:
     the finite element: fel 
-    the geometry of the element: eltrans
+    the geometry of the element: trafo
     
     Output is:
     the element vector: elvec
     
-    Efficient memorymanagement is provided my locheap
+    Efficient memory management is provided my locheap
   */
   void MySourceIntegrator ::
   CalcElementVector (const FiniteElement & base_fel,
-                     const ElementTransformation & eltrans, 
+                     const ElementTransformation & trafo, 
                      FlatVector<double> elvec,
                      LocalHeap & lh) const
   {
     /*
       tell the compiler that we are expecting a scalar element,
-      if not, an exception will be raised
+      if not, an exception will be thrown
     */
     auto & fel = dynamic_cast<const BaseScalarFiniteElement&> (base_fel);
 
@@ -51,8 +49,8 @@ namespace ngfem
     // loop over integration points    
     for (int i = 0 ; i < ir.GetNIP(); i++)
       {
-        // calculate the mapped integration point from eltrans - mapping
-        MappedIntegrationPoint<2,2> mip(ir[i], eltrans);
+        // calculate the mapped integration point from trafo 
+        MappedIntegrationPoint<2,2> mip(ir[i], trafo);
 
         // coef_f(x)
         double f = coef_f -> Evaluate (mip);
@@ -81,7 +79,7 @@ namespace ngfem
 
     Input is:
     the finite element: fel 
-    the geometry of the element: eltrans
+    the geometry of the element: trafo
     
     Output is:
     the element matrix: elmat
@@ -91,7 +89,7 @@ namespace ngfem
   
   void MyLaplaceIntegrator ::
   CalcElementMatrix (const FiniteElement & base_fel,
-                     const ElementTransformation & eltrans, 
+                     const ElementTransformation & trafo, 
                      FlatMatrix<double> elmat,
                      LocalHeap & lh) const
   {
@@ -118,9 +116,9 @@ namespace ngfem
     // loop over integration points
     for (int i = 0 ; i < ir.GetNIP(); i++)
       {
-        // calculate the mapped integration point from eltrans - mapping,
+        // calculate the mapped integration point from trafo,
         // and the Jacobi matrix as well
-        MappedIntegrationPoint<2,2> mip(ir[i], eltrans);
+        MappedIntegrationPoint<2,2> mip(ir[i], trafo);
 
         // lambda(x)
         double lam = coef_lambda -> Evaluate (mip);

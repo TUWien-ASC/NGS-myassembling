@@ -1,13 +1,14 @@
 #ifndef FILE_MYINTEGRATOR_HPP
 #define FILE_MYINTEGRATOR_HPP
 
+#include <fem.hpp>
+
 
 /*
   
 My own simple integrators for the Poisson Equation
 
 */
-
 
 namespace ngfem
 {
@@ -27,7 +28,7 @@ namespace ngfem
     
     // Calculates the element source vector
     void CalcElementVector (const FiniteElement & fel,
-                            const ElementTransformation & eltrans, 
+                            const ElementTransformation & trafo, 
                             FlatVector<double> elvec,
                             LocalHeap & lh) const override;
   };
@@ -51,7 +52,7 @@ namespace ngfem
 
     // Calculates the element matrix
     void CalcElementMatrix (const FiniteElement & fel,
-                            const ElementTransformation & eltrans, 
+                            const ElementTransformation & trafo, 
                             FlatMatrix<double> elmat,
                             LocalHeap & lh) const override;
   };
